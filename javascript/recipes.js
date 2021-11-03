@@ -1,4 +1,4 @@
-const recipes = [
+[
     {
         "id": 1,
         "name" : "Limonade de Coco",
@@ -20,7 +20,7 @@ const recipes = [
             },
             {
                 "ingredient" : "Sucre",
-                "quantite" : 30,
+                "quantity" : 30,
                 "unit" : "grammes"
             },
             {

@@ -1,5 +1,93 @@
-// Retournement du chevron des cards au clic
-const chevron = document.querySelectorAll(".search-card-button");
+// DOM
+const chevron = document.querySelectorAll(".fa-chevron-down"); // Chevrons des boutons
+const listContainer = document.querySelectorAll(".list-container"); // Containers
+const ingredientsContainer = document.getElementById("ingredients-container"); // Container des ingrédients
+const appliancesContainer = document.getElementById("appliances-container"); // Container des appareils
+const ustensilsContainer = document.getElementById("ustensils-container"); // Container des ustensiles
+const recipesContainer = document.getElementById("recipes-container"); // Container des recettes
+
+//Évènements
+chevron[0].addEventListener("click", showIngredientsList) // Affichage des ingrédients au clic sur le bouton
+chevron[1].addEventListener("click", showAppliancesList) // Affichage des appareils au clic sur le bouton
+chevron[2].addEventListener("click", showUstensilsList) // Affichage des ustensiles au clic sur le bouton
+
+// Récupération des recettes
+fetch ("javascript/recipes.js")
+    .then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+    })
+    .then(function(value) {
+        getRecipes(value)
+        
+    })
+    .catch(function(err) { // Affichage d'une éventuelle erreur sur la console
+        console.log(err)
+    })
+
+//Fonctions
+function getRecipes(recipesList) { //Affichage des recettes
+    function getIngredients(item) { // Affichage des ingrédients dans la card
+        return [
+            `<span class="ingredient">${item.ingredient}</span>:`,
+            item.quantity,
+            item.unit, `<br>`
+        ].join(" ");
+    }
+
+    const recipeHTMLString = recipesList.map((recipe)=>{return `
+    <div class="recipe-card">
+        <div class="recipe-img"></div>
+        <div class="recipe-text">
+            <div class="recipe-head">
+                <h1>${recipe.name}</h1>
+                <span class="time"><i class="far fa-clock"></i> ${recipe.time} min</span>
+            </div>
+            <div class="recipe-instructions">
+                <aside>${recipe.ingredients.map(getIngredients)}</aside>
+                <article class="description">${recipe.description}</article>
+            </div>
+        </div>
+    </div>
+    `}).join(" ")
+    recipesContainer.innerHTML = recipeHTMLString   
+}
+
+function dropdown(chevron) { //Retournement du chevron des cards au clic
+    if (chevron.style.transform == "rotate(180deg)") {
+        chevron.style.transform = "";
+    } else {
+        chevron.style.transform = "rotate(180deg)";
+    }
+}
+
+function showIngredientsList(recipe) {
+    dropdown(chevron[0])
+    function ingredientsList(item) {
+        return [item.ingredient].join(" ")
+    }
+
+    const ingredientsHTMLString = `${recipe.map(ingredientsList)}`
+    ingredientsContainer.innerHTML = ingredientsHTMLString
+}
+
+function showAppliancesList(recipesList) {
+    dropdown(chevron[1])
+    const appliancesHTMLString = recipesList.map((recipe)=>{return `
+    <span class="appliance">${recipe.appliance}</span>
+    `}).join(" ")
+    appliancesContainer.innerHTML = appliancesHTMLString
+}
+
+function showUstensilsList(recipesList) {
+    dropdown(chevron[2])
+    const ustensilsHTMLString = recipesList.map((recipe)=>{return `
+    <span class="ustensils">${recipe.ustensils}</span>
+    `}).join(" ")
+    ustensilsContainer.innerHTML = ustensilsHTMLString
+}
+/* // Retournement du chevron des cards au clic
 for (let i = 0; i < chevron.length; i++) {
     const element = chevron[i];
     element.addEventListener("click", dropdown)
@@ -10,83 +98,4 @@ for (let i = 0; i < chevron.length; i++) {
             element.style.transform = "rotate(180deg)";
         }
     }
-}
-
-// Récupération et affichage des recettes
-fetch ("javascript/recipes.js")
-    .then(function(response) {
-        if (response.ok) {
-            return response.json();
-        }
-    })
-    .then(function(value) {
-        value.map(getRecipes);
-    })
-    .catch(function(err) {
-        console.log(err)
-    })
-
-    function getRecipes(data) {
-        let recipesContainer = document.getElementById("recipes-container");
-        let cardDiv = document.createElement("div");
-        cardDiv.classList.add("recipe-card");
-        let h1 = document.createElement('h1');
-        let span = document.createElement("span");
-        span.classList.add("time")
-        let article = document.createElement("article");
-        let aside = document.createElement("aside");
-        h1.innerHTML = data.name;
-        span.innerHTML = data.time + ` min`;
-        article.innerHTML = data.description;
-        let ingredients = data.ingredients;
-        aside.innerHTML = ingredients.map(getIngredients)
-        function getIngredients(item) {
-            return [item.ingredient, item.quantity, item.unit].join(" ");
-        }
-
-        recipesContainer.appendChild(cardDiv);
-        cardDiv.appendChild(h1);
-        cardDiv.appendChild(span);
-        cardDiv.appendChild(article);
-        cardDiv.appendChild(aside);
-    }
-
-/*
-fetch ("javascript/recipes.js")
-    .then(function(response) {
-        if (response.ok) {
-            return response.json();
-        }
-    })
-    .then(function(value) {
-        appendData(value);
-    })
-    .catch(function(err) {
-        console.log(err)
-    })
-
-function appendData(value) {
-    let recipesContainer = document.getElementById("recipes-container");
-    for (let i = 0; i < value.length; i++) {
-        let cardDiv = document.createElement("div");
-        cardDiv.classList.add("recipe-card");
-        let h1 = document.createElement('h1');
-        let span = document.createElement("span");
-        let article = document.createElement("article");
-        let aside = document.createElement("aside");
-        h1.innerHTML = value[i].name + " " + value[i].servings + " " + value[i].ingredients + " " + value[i].appliance + " " + value[i].ustensils;
-        span.innerHTML = value[i].time + " min";
-        article.innerHTML = value[i].description;
-        for (let j = 0; j < value[i].ingredients.length; j++) {
-            const element = value[i].ingredients[j];
-            aside.innerHTML = element
-        }
-
-        recipesContainer.appendChild(cardDiv);
-        cardDiv.appendChild(h1);
-        cardDiv.appendChild(span);
-        cardDiv.appendChild(article);
-        cardDiv.appendChild(aside);
-    }
-}
-*/
+}*/

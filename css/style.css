@@ -79,11 +79,11 @@ header img {
     background-color: #3282F7;
 }
 
-.search-card:nth-of-type(2) {
+.search-card:nth-of-type(3) {
     background-color: #68D9A4;
 }
 
-.search-card:nth-of-type(3) {
+.search-card:nth-of-type(5) {
     background-color: #ED6454;
 }
 
@@ -98,7 +98,7 @@ header img {
     width: 90px;
 }
 
-.search-card-button {
+.fa-chevron-down {
     transition: transform 300ms;
 }
 
@@ -117,10 +117,28 @@ header img {
     background-color: #E7E7E7;
 }
 
+.recipe-img {
+    width: 100%;
+    height: 50%;
+    background-color: #C7BEBE;
+    border-radius: 5px 5px 0 0;
+}
+
+.recipe-text {
+    height: 50%;
+    padding: 20px 20px 15px 20px;
+}
+
+.recipe-head {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Nom de la recette */
 .recipe-card h1 {
     font-size: 18px;
     font-weight: 400;
+    margin-top: 0;
 }
 
 /* Temps */
@@ -128,14 +146,31 @@ header img {
     font-weight: 700;
 }
 
+.recipe-instructions {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Description */
 .recipe-card article {
     font-family: "Roboto";
     font-size: 12px;
     line-height: 12px;
+    width: 171px;
+    height: 109px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Ingrédients */
 .recipe-card aside {
     font-size: 12px;
+    line-height: 14px;
+    width: 171px;
+    height: 105px;
+    padding-right: 15px;
+}
+
+.ingredient {
+    font-weight: bold;
 }

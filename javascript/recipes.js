@@ -1124,7 +1124,7 @@
         "time": 20,
         "description":"Beurrer les tranches de pain, ajouter entre 2 tranches de pain de mie 1 tranche d'émental, une de blanc de dinde, et une autre d'emmental. Dans un récipient, mélanger le gruyère rappé avec le lait et la noix de muscade. Mettre sur les croque monsieux. Placer au four durnat 10 minutes.",
         "appliance": "Four",
-        "ustensils":["Râpe à fromage", "Cuillère à Soupe", "Couteau"]
+        "ustensils":["Râpe à fromage", "Cuillère à soupe", "Couteau"]
     },
     {
         "id": 33,
@@ -1335,7 +1335,7 @@
         "time": 20,
         "description":"Fouettez les oeufs, le sucre et le lait. tremper les tranches de pain. Le cuire au four pendant environ 10 minutes à 180°. Servir",
         "appliance": "Four",
-        "ustensils":["Fouet", "Bol","Cuillère à Soupe"]
+        "ustensils":["Fouet", "Bol","Cuillère à soupe"]
     },
     {
         "id": 39,

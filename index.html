@@ -25,7 +25,7 @@
     </header>
 
     <!-- Formulaire de recherche -->
-    <section>
+    <div>
         <form action="#" method="get" class="form">
             <div class="searchbar">
                 <input type="text" name="search" id="search" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
@@ -34,10 +34,15 @@
 
             <!-- Cards de recherche -->
             <div class="search-list">
+                <div class="filters">
+                    <div id="ingredients-filter"></div>
+                    <div id="appliances-filter"></div>
+                    <div id="ustensils-filter"></div>
+                </div>
                 <!-- Ingrédients -->
                 <div class="search-card">
                     <div class="search-input">
-                        <input type="text" name="ingredients" id="ingredients" placeholder="Ingredients">
+                        <input type="text" name="ingredients" id="ingredients" placeholder="Ingrédients">
                     <button class="search-card-button">
                         <i class="fas fa-chevron-down" id="ingredients-chevron"></i>
                     </button>
@@ -49,7 +54,7 @@
                 <!-- Appareils -->
                 <div class="search-card">
                     <div class="search-input">
-                        <input type="text" name="appareil" id="appareil" placeholder="Appareil">
+                        <input type="text" name="appareil" id="appareil" placeholder="Appareils">
                         <button class="search-card-button">
                             <i class="fas fa-chevron-down" id="appliances-chevron"></i>
                         </button>
@@ -72,7 +77,7 @@
                 </div>
             </div>
         </form>        
-    </section>
+    </div>
 
     <!-- Recettes -->
     <div class="recipes" id="recipes-container">

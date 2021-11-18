@@ -1,7 +1,13 @@
 // DOM
-const searchBarInput = document.getElementById("search"); // Input de la barre de recherche
+const searchbarInput = document.getElementById("search"); // Input de la barre de recherche
 const chevron = document.querySelectorAll(".fa-chevron-down"); // Chevrons des boutons
-const searchCard = document.querySelectorAll(".search-card")
+const searchCard = document.querySelectorAll(".search-card"); // Search-cards Ingrédients, Appareil, Ustensiles
+const ingredientsFilter = document.getElementById("ingredients-filter"); // Résultat de la recherche d'ingrédient
+const appliancesFilter = document.getElementById("appliances-filter"); // Résultat de la recherche d'appareils
+const ustensilsFilter = document.getElementById("ustensils-filter"); // Résultat de la recherche d'ustensiles
+const ingredientsInput = document.getElementById("ingredients"); // Input de la search-card "Ingredients"
+const appliancesInput = document.getElementById("appareil"); // Input de la search-card "Appareil"
+const ustensilsInput = document.getElementById("ustensiles"); // Input de la search-card "Ustensiles"
 const listContainer = document.querySelectorAll(".list-container"); // Containers
 const ingredientsUl = document.getElementById("ingredients-ul"); // Container des ingrédients
 const appliancesUl = document.getElementById("appliances-ul"); // Container des appareils
@@ -27,31 +33,95 @@ function getRecipes(recipesList) {
     }
 
     // Affichage des ingrédients pour la search-card "Ingrédients"
-    function getIngredientsList(item) {
-        return `<li>${item.ingredient}</li>,`
+     function getIngredientsList(item) {
+        return `<li>${item.ingredient}</li>`
     }
     
-    const ingredientsArr = recipesList.map((recipe)=>{
-        return `${recipe.ingredients.map(getIngredientsList).join(" ").split(",")}`
-    })
-    const ingredientsHTMLString = ingredientsArr.filter((e,i)=>ingredientsArr.indexOf(e) == i).join(" ").replace(/[, ]+/g, " ")
+    const ingredientsArray = recipesList.reduce((ingredientsArray, recipe)=>{
+        return [...ingredientsArray, ...recipe.ingredients.map(getIngredientsList)]
+    }, [])
+    let ingredientsFilteredArray = ingredientsArray.filter((e,i)=>ingredientsArray.indexOf(e) == i)
+    let ingredientsHTMLString = ingredientsFilteredArray.join("")
     ingredientsUl.innerHTML = ingredientsHTMLString || ""
-    
+
+    //Filtrage des ingredients
+    ingredientsInput.addEventListener("input", ingredientsFilter) 
+    function ingredientsFilter() {
+        if (ingredientsInput.value.length >= 3) { // À partir de 3 caractères
+            if (!searchCard[0].classList.contains("active")) { // Si la liste n'est pas affichée
+                searchCard[0].classList.add("active") // Ouvre la liste
+            }
+            let newIngredientsFilterArray = [] // Crée un tableau
+            for (let i = 0; i < ingredientsFilteredArray.length; i++) { // Boucle sur les éléments du tableau des appareils
+                const element = ingredientsFilteredArray[i]; // Pour chaque élément
+                let research = ingredientsInput.value.toLowerCase() // Mot-clé de la recherche
+                if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
+                    newIngredientsFilterArray.push(element) // Insère l'élément dans le tableau
+                }
+            }
+            ingredientsUl.innerHTML = newIngredientsFilterArray.join(" ") // Affiche les résultats de la recherche
+        } else { // Si la recherche comprend moins de 3 caractères
+            ingredientsUl.innerHTML = ingredientsHTMLString || "" // Affichage complet de la liste
+        }
+    }
+
     // Affichage des appareils dans la search-card "Appareils"
     const appliancesArray = recipesList.map((recipe)=>{
         return `<li>${recipe.appliance}</li>`
     })
-    const appliancesHTMLString = appliancesArray.filter((e,i)=>appliancesArray.indexOf(e) == i).join(" ")
+    let appliancesFilteredArray = appliancesArray.filter((e,i)=>appliancesArray.indexOf(e) == i)
+    const appliancesHTMLString = appliancesFilteredArray.join(" ")
     appliancesUl.innerHTML = appliancesHTMLString || ""
+
+    //Filtrage des appareils
+    appliancesInput.addEventListener("input", appliancesFilter) 
+    function appliancesFilter() {
+        if (appliancesInput.value.length >= 3) { // À partir de 3 caractères
+            if (!searchCard[1].classList.contains("active")) { // Si la liste n'est pas affichée
+                searchCard[1].classList.add("active") // Ouvre la liste
+            }
+            let newAppliancesFilterArray = [] // Crée un tableau
+            for (let i = 0; i < appliancesFilteredArray.length; i++) { // Boucle sur les éléments du tableau des appareils
+                const element = appliancesFilteredArray[i]; // Pour chaque élément
+                let research = appliancesInput.value.toLowerCase() // Mot-clé de la recherche
+                if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
+                    newAppliancesFilterArray.push(element) // Insère l'élément dans le tableau
+                }
+            }
+            appliancesUl.innerHTML = newAppliancesFilterArray.join(" ") // Affiche les résultats de la recherche
+        } else { // Si la recherche comprend moins de 3 caractères
+            appliancesUl.innerHTML = appliancesHTMLString || "" // Affichage complet de la liste
+        }
+    }
     
     // Affichage des ustensiles dans la search-card "Ustensiles"
-    function getUstensilsList(item) {
-        return `<li>${item}</li>`
-    }
-    const ustensilsHTMLString = recipesList.map((recipe)=>{
-        return `${recipe.ustensils.map(getUstensilsList).join(" ")}`
-    }).join(" ")
+    const ustensilsArray = recipesList.reduce((ustensilsArray, recipe)=>{
+        return [...ustensilsArray, ...recipe.ustensils]
+    }, [])
+    let ustensilsFilteredArray = ustensilsArray.filter((e,i)=>ustensilsArray.indexOf(e) == i)
+    let ustensilsHTMLString = ustensilsFilteredArray.join(" ")
     ustensilsUl.innerHTML = ustensilsHTMLString || ""
+
+    //Filtrage des ustensils
+    ustensilsInput.addEventListener("input", ustensilsFilter) 
+    function ustensilsFilter() {
+        if (ustensilsInput.value.length >= 3) { // À partir de 3 caractères
+            if (!searchCard[2].classList.contains("active")) { // Si la liste n'est pas affichée
+                searchCard[2].classList.add("active") // Ouvre la liste
+            }
+            let newUstensilsFilterArray = [] // Crée un tableau
+            for (let i = 0; i < ustensilsFilteredArray.length; i++) { // Boucle sur les éléments du tableau des ustensiles
+                const element = ustensilsFilteredArray[i]; // Pour chaque élément
+                let research = ustensilsInput.value.toLowerCase() // Mot-clé de la recherche
+                if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
+                    newUstensilsFilterArray.push(element) // Insère l'élément dans le tableau
+                }
+            }
+            ustensilsUl.innerHTML = newUstensilsFilterArray.join(" ") // Affiche les résultats de la recherche
+        } else { // Si la recherche comprend moins de 3 caractères
+            ustensilsUl.innerHTML = ustensilsHTMLString || "" // Affichage complet de la liste
+        }
+    }
 
     //Affichage des recettes sur la page
     const recipeArray = recipesList.map((recipe)=>{return `
@@ -71,27 +141,26 @@ function getRecipes(recipesList) {
     `})
     let recipeHTMLString = recipeArray.join(" ")
     recipesContainer.innerHTML = recipeHTMLString
-    console.log(recipesList);
     
     // Filtrage des recettes avec la search-bar
-    searchBarInput.addEventListener("input", recipeFilter)
+    searchbarInput.addEventListener("input", recipeFilter)
     function recipeFilter() {
-        if (searchBarInput.value.length >= 3) {
-            let searchArray = []
-            for (let i = 0; i < recipeArray.length; i++) {
-                const element = recipeArray[i];
-                let research = searchBarInput.value.toLowerCase()
-                if (element.toLowerCase().includes(research)) {
-                    searchArray.push(element)
+        if (searchbarInput.value.length >= 3) { // À partir de 3 caractères
+            let searchArray = [] // Crée un tableau
+            for (let i = 0; i < recipeArray.length; i++) { // Boucle sur les éléments du tableau des recettes
+                const element = recipeArray[i]; // Pour chaque élément du tableau
+                let research = searchbarInput.value.toLowerCase() // Récupère le résultat de la recherche
+                if (element.toLowerCase().includes(research)) { // Si une recette contient ce résultat
+                    searchArray.push(element) // Insère la recette dans le tableau créé
                 }
             }
-            if (searchArray.length === 0) {
+            if (searchArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
                 recipesContainer.innerHTML = "Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.";
-            } else {
+            } else { // Sinon (si au moins une recette correspond)
                 recipesContainer.innerHTML = searchArray.join(" ")
             }
-        } else {
-            recipesContainer.innerHTML = recipeHTMLString
+        } else { // Si l'input comprend moins de 3 caractères
+            recipesContainer.innerHTML = recipeHTMLString // Affichage de toutes les recettes
         }
     }
 }
@@ -99,25 +168,46 @@ function getRecipes(recipesList) {
 // Affichage des ingrédients au clic sur le bouton
 chevron[0].addEventListener("click", showIngredientsList) 
 function showIngredientsList() {
-    openCard(searchCard[0]) // Ouverture de la search-card
+    if (searchCard[0].classList.contains("active")) {
+        ingredientsInput.placeholder = "Ingrédients"
+    } else {
+        ingredientsInput.placeholder = "Rechercher un ingrédient"
+    }
+    openCard(searchCard[0])
     closeCard(searchCard[1])
+    appliancesInput.placeholder = "Appareil"
     closeCard(searchCard[2])
+    ustensilsInput.placeholder = "Ustensiles"
 }
     
 // Affichage des appareils au clic sur le bouton
 chevron[1].addEventListener("click", showAppliancesList) 
 function showAppliancesList() {
-    openCard(searchCard[1]) // Ouverture de la search-card
+    if (searchCard[1].classList.contains("active")) {
+        appliancesInput.placeholder = "Appareil"
+    } else {
+        appliancesInput.placeholder = "Rechercher un appareil"
+    }
+    openCard(searchCard[1]) 
     closeCard(searchCard[0])
+    ingredientsInput.placeholder = "Ingrédients"
     closeCard(searchCard[2])
+    ustensilsInput.placeholder = "Ustensiles"
 }
 
 // Affichage des ustensiles au clic sur le bouton
 chevron[2].addEventListener("click", showUstensilsList) 
 function showUstensilsList() {
-    openCard(searchCard[2]) // Ouverture de la search-card
+    if (searchCard[2].classList.contains("active")) {
+        ustensilsInput.placeholder = "Ustensiles"
+    } else {
+        ustensilsInput.placeholder = "Rechercher un ustensile"
+    }
+    openCard(searchCard[2]) 
     closeCard(searchCard[0])
+    ingredientsInput.placeholder = "Ingrédients"
     closeCard(searchCard[1])
+    appliancesInput.placeholder = "Appareil"
 }
 
 // Ouverture de la searchCard + retournement chevron

@@ -2,9 +2,9 @@
 const searchbarInput = document.getElementById("search"); // Input de la barre de recherche
 const chevron = document.querySelectorAll(".fa-chevron-down"); // Chevrons des boutons
 const searchCard = document.querySelectorAll(".search-card"); // Search-cards Ingrédients, Appareil, Ustensiles
-const ingredientsFilter = document.getElementById("ingredients-filter"); // Résultat de la recherche d'ingrédient
-const appliancesFilter = document.getElementById("appliances-filter"); // Résultat de la recherche d'appareils
-const ustensilsFilter = document.getElementById("ustensils-filter"); // Résultat de la recherche d'ustensiles
+const ingredientsFilterDiv = document.getElementById("ingredients-filter-div"); // Résultat de la recherche d'ingrédient
+const appliancesFilterDiv = document.getElementById("appliances-filter-div"); // Résultat de la recherche d'appareils
+const ustensilsFilterDiv = document.getElementById("ustensils-filter-div"); // Résultat de la recherche d'ustensiles
 const ingredientsInput = document.getElementById("ingredients"); // Input de la search-card "Ingredients"
 const appliancesInput = document.getElementById("appareil"); // Input de la search-card "Appareil"
 const ustensilsInput = document.getElementById("ustensiles"); // Input de la search-card "Ustensiles"
@@ -12,6 +12,8 @@ const listContainer = document.querySelectorAll(".list-container"); // Container
 const ingredientsUl = document.getElementById("ingredients-ul"); // Container des ingrédients
 const appliancesUl = document.getElementById("appliances-ul"); // Container des appareils
 const ustensilsUl = document.getElementById("ustensils-ul"); // Container des ustensiles
+const ingredientsResult = document.querySelectorAll(".ingredients-result") // Ingrédients de la liste
+const appliancesResult = document.querySelectorAll(".appliances-result") // Appareils de la liste
 const recipesContainer = document.getElementById("recipes-container"); // Container des recettes
 
 // Récupération des recettes  
@@ -34,7 +36,7 @@ function getRecipes(recipesList) {
 
     // Affichage des ingrédients pour la search-card "Ingrédients"
      function getIngredientsList(item) {
-        return `<li>${item.ingredient}</li>`
+        return `<li class="ingredients-result">${item.ingredient}</li>`
     }
     
     const ingredientsArray = recipesList.reduce((ingredientsArray, recipe)=>{
@@ -65,9 +67,16 @@ function getRecipes(recipesList) {
         }
     }
 
+    // Affichage de l'ingrédient sélectionné
+    function addFilteredIngredient() {
+        const ingredientsResult = document.querySelectorAll(".ingredients-result") // Ingrédients de la liste
+        console.log(ingredientsResult);
+    }
+    addFilteredIngredient()
+    
     // Affichage des appareils dans la search-card "Appareils"
     const appliancesArray = recipesList.map((recipe)=>{
-        return `<li>${recipe.appliance}</li>`
+        return `<li class="appliances-result">${recipe.appliance}</li>`
     })
     let appliancesFilteredArray = appliancesArray.filter((e,i)=>appliancesArray.indexOf(e) == i)
     const appliancesHTMLString = appliancesFilteredArray.join(" ")
@@ -99,7 +108,9 @@ function getRecipes(recipesList) {
         return [...ustensilsArray, ...recipe.ustensils]
     }, [])
     let ustensilsFilteredArray = ustensilsArray.filter((e,i)=>ustensilsArray.indexOf(e) == i)
-    let ustensilsHTMLString = ustensilsFilteredArray.join(" ")
+    let ustensilsHTMLString = ustensilsFilteredArray.map(item =>{
+        return `<li>${item}</li>`
+    }).join("")
     ustensilsUl.innerHTML = ustensilsHTMLString || ""
 
     //Filtrage des ustensils

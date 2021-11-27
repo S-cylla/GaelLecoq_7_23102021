@@ -54,10 +54,33 @@ header img {
     align-items: center;
     padding-left: 22px;
     padding-right: 17px;
+    margin-bottom: 25px;
+}
+
+/* Div des filtres */
+.item-filters {
+    display: none;
+    padding: 10px 20px;
+    width: auto;
+    border-radius: 5px;
+    color: #FFF;
+    margin-bottom: 15px;
+}
+
+.item-filters.active {
+    display: inline-flex;
+}
+
+.filtered-item {
+    margin-right: 13px;
+}
+
+.close-button {
+    cursor: pointer;
 }
 
 /* Container des cards de recherche par ingrédients, appareils, ustensiles */
-.search-list {
+.cards {
     display: flex;
     gap: 20px;
     margin-top: 20px;
@@ -122,15 +145,18 @@ header img {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.search-card:nth-of-type(2) {
+.item-filters:nth-of-type(1),
+.search-card:nth-of-type(1) {
     background-color: #3282F7;
 }
 
-.search-card:nth-of-type(3) {
+.item-filters:nth-of-type(2),
+.search-card:nth-of-type(2) {
     background-color: #68D9A4;
 }
 
-.search-card:nth-of-type(4) {
+.item-filters:nth-of-type(3),
+.search-card:nth-of-type(3) {
     background-color: #ED6454;
 }
 

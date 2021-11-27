@@ -32,47 +32,58 @@
                 <button type="submit" class="searchbar-button"><i class="fas fa-2x fa-search"></i></button>
             </div>
 
-            <!-- Cards de recherche -->
             <div class="search-list">
                 <div class="filters">
-                    <div id="ingredients-filter-div"></div>
-                    <div id="appliances-filter-div"></div>
-                    <div id="ustensils-filter-div"></div>
-                </div>
-                <!-- Ingrédients -->
-                <div class="search-card">
-                    <div class="search-input">
-                        <input type="text" name="ingredients" id="ingredients" placeholder="Ingrédients">
-                    <button class="search-card-button">
-                        <i class="fas fa-chevron-down" id="ingredients-chevron"></i>
-                    </button>
+                    <div id="ingredients-filter-div" class="item-filters">
+                        <div id="filtered-ingredient" class="filtered-item"></div>
+                        <i class="far fa-times-circle close-button"></i>
                     </div>
-                    <div id="ingredients-container" class="list-container">
-                        <ul id="ingredients-ul"></ul>
+                    <div id="appliances-filter-div" class="item-filters">
+                        <div id="filtered-appliance" class="filtered-item"></div>
+                        <i class="far fa-times-circle close-button"></i>
+                    </div>
+                    <div id="ustensils-filter-div" class="item-filters">
+                        <div id="filtered-ustensil" class="filtered-item"></div>
+                        <i class="far fa-times-circle close-button"></i>
                     </div>
                 </div>
-                <!-- Appareils -->
-                <div class="search-card">
-                    <div class="search-input">
-                        <input type="text" name="appareil" id="appareil" placeholder="Appareils">
+            <!-- Cards de recherche -->
+                <div class="cards">
+                    <!-- Ingrédients -->
+                    <div class="search-card">
+                        <div class="search-input">
+                            <input type="text" name="ingredients" id="ingredients" placeholder="Ingrédients">
                         <button class="search-card-button">
-                            <i class="fas fa-chevron-down" id="appliances-chevron"></i>
+                            <i class="fas fa-chevron-down" id="ingredients-chevron"></i>
                         </button>
+                        </div>
+                        <div id="ingredients-container" class="list-container">
+                            <ul id="ingredients-ul"></ul>
+                        </div>
                     </div>
-                    <div id="appliances-container" class="list-container">
-                        <ul id="appliances-ul"></ul>
+                    <!-- Appareils -->
+                    <div class="search-card">
+                        <div class="search-input">
+                            <input type="text" name="appareil" id="appareil" placeholder="Appareils">
+                            <button class="search-card-button">
+                                <i class="fas fa-chevron-down" id="appliances-chevron"></i>
+                            </button>
+                        </div>
+                        <div id="appliances-container" class="list-container">
+                            <ul id="appliances-ul"></ul>
+                        </div>
                     </div>
-                </div>
-                <!-- Ustensiles -->
-                <div class="search-card">
-                    <div class="search-input">
-                        <input type="text" name="ustensiles" id="ustensiles" placeholder="Ustensiles">
-                        <button class="search-card-button">
-                            <i class="fas fa-chevron-down" id="ustensils-chevron"></i>
-                        </button>
-                    </div>
-                    <div id="ustensils-container" class="list-container">
-                        <ul id="ustensils-ul"></ul>
+                    <!-- Ustensiles -->
+                    <div class="search-card">
+                        <div class="search-input">
+                            <input type="text" name="ustensiles" id="ustensiles" placeholder="Ustensiles">
+                            <button class="search-card-button">
+                                <i class="fas fa-chevron-down" id="ustensils-chevron"></i>
+                            </button>
+                        </div>
+                        <div id="ustensils-container" class="list-container">
+                            <ul id="ustensils-ul"></ul>
+                        </div>
                     </div>
                 </div>
             </div>

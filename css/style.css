@@ -176,6 +176,7 @@ header img {
 
 .fa-chevron-down {
     transition: transform 300ms;
+    cursor: pointer;
 }
 
 .search-card.active .fa-chevron-down {

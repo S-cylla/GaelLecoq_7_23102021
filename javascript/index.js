@@ -120,12 +120,19 @@ function getRecipes(recipes) {
                 searchCard[0].classList.add("active") // Ouvre la liste
             }
             let newIngredientsFilterArray = [] // Crée un tableau
-            ingredientsFilteredArray.forEach(element => { // Itère sur les éléments du tableau des ingrédients
+            for (let i = 0; i < ingredientsFilteredArray.length; i++) {
+                const element = ingredientsFilteredArray[i];
                 let research = ingredientsInput.value.toLowerCase() // Récupère le résultat de la recherche
                 if (element.toLowerCase().includes(research)) { // Si un élément correspond à la recherche
                     newIngredientsFilterArray.push(element) // Insère l'élément dans le tableau créé
                 }
-            })
+            }
+            /* ingredientsFilteredArray.forEach(element => { // Itère sur les éléments du tableau des ingrédients
+                let research = ingredientsInput.value.toLowerCase() // Récupère le résultat de la recherche
+                if (element.toLowerCase().includes(research)) { // Si un élément correspond à la recherche
+                    newIngredientsFilterArray.push(element) // Insère l'élément dans le tableau créé
+                }
+            }) */
             ingredientsUl.innerHTML = newIngredientsFilterArray.join(" ") // Affiche les résultats de la recherche
         } else { // Si la recherche comprend moins de 3 caractères
             ingredientsUl.innerHTML = ingredientsHTMLString || "" // Affichage complet de la liste
@@ -137,7 +144,7 @@ function getRecipes(recipes) {
     // Affichage de l'ingrédient sélectionné
     function addFilteredIngredient() {
         const ingredientsResult = document.querySelectorAll(".ingredients-result") // Ingrédients de la liste
-        /* for (let i = 0; i < ingredientsResult.length; i++) {
+        for (let i = 0; i < ingredientsResult.length; i++) {
             ingredientsResult[i].addEventListener("click", addItem)
             function addItem(ingredient) {
                 itemFilters[0].classList.add("active")
@@ -145,8 +152,8 @@ function getRecipes(recipes) {
                 filteredIngredient.innerHTML = itemString
                 closeCard(searchCard[0])
             }
-        } */
-        ingredientsResult.forEach(element => {
+        }
+        /* ingredientsResult.forEach(element => {
             element.addEventListener("click", addItem)
             function addItem(ingredient) {
                 itemFilters[0].classList.add("active")
@@ -154,7 +161,7 @@ function getRecipes(recipes) {
                 filteredIngredient.innerHTML = itemString
                 closeCard(searchCard[0])
             }
-        })
+        }) */
     }
 
     // *******************************************************************************
@@ -180,19 +187,19 @@ function getRecipes(recipes) {
             }
             addAppliancesList(recipes)
             let newAppliancesFilterArray = [] // Crée un tableau
-            /* for (let i = 0; i < appliancesFilteredArray.length; i++) { // Boucle sur les éléments du tableau des appareils
+            for (let i = 0; i < appliancesFilteredArray.length; i++) { // Boucle sur les éléments du tableau des appareils
                 const element = appliancesFilteredArray[i]; // Pour chaque élément
                 let research = appliancesInput.value.toLowerCase() // Mot-clé de la recherche
                 if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
                     newAppliancesFilterArray.push(element) // Insère l'élément dans le tableau
                 }
-            } */
-            appliancesFilteredArray.forEach(element => {
+            }
+            /* appliancesFilteredArray.forEach(element => {
                 let research = appliancesInput.value.toLowerCase() // Mot-clé de la recherche
                 if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
                     newAppliancesFilterArray.push(element) // Insère l'élément dans le tableau
                 }
-            })
+            }) */
             appliancesUl.innerHTML = newAppliancesFilterArray.join(" ") // Affiche les résultats de la recherche
         } else { // Si la recherche comprend moins de 3 caractères
             appliancesUl.innerHTML = appliancesHTMLString || "" // Affichage complet de la liste
@@ -204,7 +211,7 @@ function getRecipes(recipes) {
     // Affichage de l'appareil sélectionné
     function addFilteredAppliance() {
         const appliancesResult = document.querySelectorAll(".appliances-result") // Appareils de la liste
-        /* for (let i = 0; i < appliancesResult.length; i++) {
+        for (let i = 0; i < appliancesResult.length; i++) {
             appliancesResult[i].addEventListener("click", addItem)
             function addItem(appliance) {
                 itemFilters[1].classList.add("active")
@@ -212,8 +219,8 @@ function getRecipes(recipes) {
                 filteredAppliance.innerHTML = itemString
                 closeCard(searchCard[1])
             }
-        } */
-        appliancesResult.forEach(element => {
+        }
+        /* appliancesResult.forEach(element => {
             element.addEventListener("click", addItem)
             function addItem(appliance) {
                 itemFilters[1].classList.add("active")
@@ -221,7 +228,7 @@ function getRecipes(recipes) {
                 filteredAppliance.innerHTML = itemString
                 closeCard(searchCard[1])
             }
-        })
+        }) */
     }
 
     // ********************************************************************************
@@ -249,19 +256,19 @@ function getRecipes(recipes) {
             }
             addUstensilslist(recipes)
             let newUstensilsFilterArray = [] // Crée un tableau
-            /* for (let i = 0; i < ustensilsFilteredArray.length; i++) { // Boucle sur les éléments du tableau des ustensiles
+            for (let i = 0; i < ustensilsFilteredArray.length; i++) { // Boucle sur les éléments du tableau des ustensiles
                 const element = ustensilsFilteredArray[i]; // Pour chaque élément
                 let research = ustensilsInput.value.toLowerCase() // Mot-clé de la recherche
                 if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
                     newUstensilsFilterArray.push(element) // Insère l'élément dans le tableau
                 }
-            } */
-            ustensilsFilteredArray.forEach(element => {
+            }
+            /* ustensilsFilteredArray.forEach(element => {
                 let research = ustensilsInput.value.toLowerCase() // Mot-clé de la recherche
                 if (element.toLowerCase().includes(research)) { // Isole l'élément correspondant à la recherche
                     newUstensilsFilterArray.push(element) // Insère l'élément dans le tableau créé
                 }
-            })
+            }) */
             ustensilsUl.innerHTML = newUstensilsFilterArray.join(" ") // Affiche les résultats de la recherche
         } else { // Si la recherche comprend moins de 3 caractères
             ustensilsUl.innerHTML = ustensilsHTMLString // Affichage complet de la liste
@@ -273,7 +280,7 @@ function getRecipes(recipes) {
     // Affichage de l'ustensile sélectionné
     function addFilteredUstensil() {
         const ustensilsResult = document.querySelectorAll(".ustensils-result") //Ustensiles de la liste
-        /* for (let i = 0; i < ustensilsResult.length; i++) {
+        for (let i = 0; i < ustensilsResult.length; i++) {
             ustensilsResult[i].addEventListener("click", addItem)
             function addItem(ustensil) {
                 itemFilters[2].classList.add("active")
@@ -281,8 +288,8 @@ function getRecipes(recipes) {
                 filteredUstensil.innerHTML = itemString
                 closeCard(searchCard[2])
             }
-        } */
-        ustensilsResult.forEach(element => {
+        }
+        /* ustensilsResult.forEach(element => {
             element.addEventListener("click", addItem)
             function addItem(ustensil) {
                 itemFilters[2].classList.add("active")
@@ -290,7 +297,7 @@ function getRecipes(recipes) {
                 filteredUstensil.innerHTML = itemString
                 closeCard(searchCard[2])
             }
-        })
+        }) */
     }
 
     // *******************************************************************************
@@ -302,13 +309,21 @@ function getRecipes(recipes) {
         if (searchbarInput.value.length >= 3) { // À partir de 3 caractères
             let searchArray = [] // Crée un tableau
             let searchRecipes = []
-            recipeArray.forEach(element => {
+            for (let i = 0; i < recipeArray.length; i++) {
+                const element = recipeArray[i];
                 let research = searchbarInput.value.toLowerCase() // Récupère le résultat de la recherche
                 if (element.html.toLowerCase().includes(research)) {
                     searchArray.push(element.html) // Insère la recette dans le tableau créé
                     searchRecipes.push(element.recipe) // Insère la recette dans le tableau créé
                 }
-            })
+            }
+            /* recipeArray.forEach(element => {
+                let research = searchbarInput.value.toLowerCase() // Récupère le résultat de la recherche
+                if (element.html.toLowerCase().includes(research)) {
+                    searchArray.push(element.html) // Insère la recette dans le tableau créé
+                    searchRecipes.push(element.recipe) // Insère la recette dans le tableau créé
+                }
+            }) */
             if (searchArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
                 recipesContainer.innerHTML = "Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.";
             } else { // Sinon (si au moins une recette correspond)

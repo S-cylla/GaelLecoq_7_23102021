@@ -117,7 +117,7 @@ header img {
     border-radius: 0 0 5px 5px;
     width: 667px;
     max-height: 328px;
-    padding: 25px;
+    padding: 15px 25px;
     overflow-y: auto;
     transition: transform 300ms;
     transform-origin: top left;
@@ -137,25 +137,25 @@ header img {
 .list-container li {
     cursor: pointer;
     padding: 5px 10px;
+    margin: 1px;
 }
 
 .list-container li:hover {
     opacity: 0.8;
-    border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
 }
 
-.item-filters:nth-of-type(1),
+.ingredients-filter,
 .search-card:nth-of-type(1) {
     background-color: #3282F7;
 }
 
-.item-filters:nth-of-type(2),
+.appliances-filter,
 .search-card:nth-of-type(2) {
     background-color: #68D9A4;
 }
 
-.item-filters:nth-of-type(3),
+.ustensils-filter,
 .search-card:nth-of-type(3) {
     background-color: #ED6454;
 }

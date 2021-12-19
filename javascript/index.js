@@ -149,8 +149,8 @@ function getRecipes(recipes) {
         } */
         ingredientsResult.forEach(element => {
             element.addEventListener("click", addItem)
-            function addItem(ingredient) {
-                let itemString = ingredient.target.innerText // Crée une variable contenant le texte de l'item cliqué
+            function addItem(eventIngredient) {
+                let itemString = eventIngredient.target.innerText // Crée une variable contenant le texte de l'item cliqué
                 let ingredientsFilter = document.createElement("div") // Crée la div du filtre
                 ingredientsFilter.classList.add("item-filters") // Ajoute les classes
                 ingredientsFilter.classList.add("ingredients-filter")
@@ -160,12 +160,11 @@ function getRecipes(recipes) {
                 <i class="far fa-times-circle close-button"></i>
                 `
                 filters.appendChild(ingredientsFilter) // Insère le filtre dans sa div
-                selectedTags.push(ingredient.target.innerText)
-                recipeFilter(event, mode = "tag")
+                selectedTags.push(itemString)
+                recipeFilter(eventIngredient, "tag")
                 closeFilter()
                 closeCard(searchCard[0])
                 ingredientsInput.placeholder = `Ingrédients`
-                console.log(selectedTags.join(" "));
             }
         })
     }
@@ -228,8 +227,8 @@ function getRecipes(recipes) {
         } */
         appliancesResult.forEach(element => {
             element.addEventListener("click", addItem)
-            function addItem(appliance) {
-                let itemString = appliance.target.innerText // Crée une variable contenant le texte de l'item cliqué
+            function addItem(eventAppliance) {
+                let itemString = eventAppliance.target.innerText // Crée une variable contenant le texte de l'item cliqué
                 let appliancesFilter = document.createElement("div") // Crée la div du filtre
                 appliancesFilter.classList.add("item-filters") // Ajoute les classes
                 appliancesFilter.classList.add("appliances-filter")
@@ -239,12 +238,11 @@ function getRecipes(recipes) {
                 <i class="far fa-times-circle close-button"></i>
                 `
                 filters.appendChild(appliancesFilter) // Insère le filtre dans sa div
-                selectedTags.push(appliance.target.innerText)
-                recipeFilter(event, mode = "tag")
+                selectedTags.push(itemString)
+                recipeFilter(eventAppliance, "tag")
                 closeFilter()
                 closeCard(searchCard[1])
                 appliancesInput.placeholder = `Appareils`
-                console.log(selectedTags.join(""));
             }
         })
     }
@@ -311,8 +309,8 @@ function getRecipes(recipes) {
         } */
         ustensilsResult.forEach(element => {
             element.addEventListener("click", addItem)
-            function addItem(ustensil) {
-                let itemString = ustensil.target.innerText // Crée une variable contenant le texte de l'item cliqué
+            function addItem(eventUstensil) {
+                let itemString = eventUstensil.target.innerText // Crée une variable contenant le texte de l'item cliqué
                 let ustensilsFilter = document.createElement("div") // Crée la div du filtre
                 ustensilsFilter.classList.add("item-filters") // Ajoute les classes
                 ustensilsFilter.classList.add("ustensils-filter")
@@ -323,11 +321,10 @@ function getRecipes(recipes) {
                 `
                 filters.appendChild(ustensilsFilter) // Insère le filtre dans sa div
                 selectedTags.push(itemString)
-                recipeFilter(event, mode = "tag")
+                recipeFilter(eventUstensil, "tag")
                 closeFilter()
                 closeCard(searchCard[2])
                 ustensilsInput.placeholder = `Ustensiles`
-                console.log(selectedTags.join(""));
             }
         })
     }
@@ -340,61 +337,84 @@ function getRecipes(recipes) {
     function recipeFilter(event, mode = "search") {
         const input = event.currentTarget
         if (mode == "search") {
-            function searchbarResearch() {
-                if (input.value.length >= 3) { // À partir de 3 caractères
-                    let searchArray = [] // Crée un tableau
-                    let searchRecipes = []
-                    recipeArray.forEach(element => {
-                        let research = input.value.toLowerCase() // Récupère le résultat de la recherche
-                        if (element.html.toLowerCase().includes(research)) {
-                            searchArray.push(element.html) // Insère la recette dans le tableau créé
-                            searchRecipes.push(element.recipe) // Insère la recette dans le tableau créé
-                        }
-                    })
-                    if (searchArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
-                        recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`;
-                    } else { // Sinon (si au moins une recette correspond)
-                        recipesContainer.innerHTML = searchArray.join(" ")
-                    }
-                    addIngredientsList(searchRecipes)
-                    addAppliancesList(searchRecipes)
-                    addUstensilslist(searchRecipes)
-                } else { // Si l'input comprend moins de 3 caractères
-                    recipesContainer.innerHTML = recipeHTMLString // Affichage de toutes les recettes
-                    addIngredientsList(recipes)
-                    addAppliancesList(recipes)
-                    addUstensilslist(recipes)
-                }
-                addFilteredIngredient()
-                addFilteredAppliance()
-                addFilteredUstensil()
-            }
-            searchbarResearch()
+            searchbarResearch(input)
         } else if (mode == "tag") {
+            console.log(`mode = "tag"`);
+            console.log(`tags sélectionnés : `,selectedTags);
             if (selectedTags.length != 0) {
                 let tagArray = [] // Crée un tableau
                 let tagRecipes = []
                 recipeArray.forEach(element => {
-                    if (element.html.toLowerCase().includes(selectedTags.join(""))) {
-                        console.log("ok");
-                        searchArray.push(element.html) // Insère la recette dans le tableau créé
+                    console.log(element.html.toLowerCase());
+                    if (element.html.toLowerCase().includes(selectedTags.join("").toLowerCase())) {
+                        console.log(`recette trouvée`);
+                        tagArray.push(element.html) // Insère la recette dans le tableau créé
                         tagRecipes.push(element.recipe) // Insère la recette dans le tableau créé
+                        console.log(tagRecipes);
                     }
                 })
-                console.log(tagArray);
-                console.log(tagRecipes);
-                console.log(selectedTags);
                 if (tagArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
                     recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`;
                 } else { // Sinon (si au moins une recette correspond)
                     recipesContainer.innerHTML = tagArray.join(" ")
                 }
+                addIngredientsList(tagRecipes)
+                addAppliancesList(tagRecipes)
+                addUstensilslist(tagRecipes)
             } else {
-                searchbarResearch()
+                searchbarResearch(input)
+            }
+        } else if (mode == "ustensilsTag") {
+            console.log(`mode = "ustensilsTag"`);
+            if (selectedTags.length != 0) {
+                let ustensilsTagArray = []
+                let ustensilsTagRecipes = []
+                const ustensilsArray = addUstensilslist(recipes) 
+                ustensilsArray.forEach(element => {
+                    if (element.toLowerCase().includes(selectedTags.join("").toLowerCase())) {
+                        console.log(`ustensile :`, element);
+                        ustensilsTagArray.push(element)
+                    }
+                })
+                if (ustensilsTagArray === 0) {
+                    recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`; 
+                } else {
+                    recipesContainer.innerHTML = ustensilsTagArray.join(" ")
+                }
             }
         }
+        addFilteredIngredient()
+        addFilteredAppliance()
+        addFilteredUstensil()
     }    
 
+    function searchbarResearch(input) {
+        console.log(input.value);
+        if (input.value.length >= 3) { // À partir de 3 caractères
+            let searchArray = [] // Crée un tableau
+            let searchRecipes = []
+            recipeArray.forEach(element => {
+                let research = input.value.toLowerCase() // Récupère le résultat de la recherche
+                if (element.html.toLowerCase().includes(research)) {
+                    searchArray.push(element.html) // Insère la recette dans le tableau créé
+                    searchRecipes.push(element.recipe) // Insère la recette dans le tableau créé
+                }
+            })
+            if (searchArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
+                recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`;
+            } else { // Sinon (si au moins une recette correspond)
+                recipesContainer.innerHTML = searchArray.join(" ")
+            }
+            addIngredientsList(searchRecipes)
+            addAppliancesList(searchRecipes)
+            addUstensilslist(searchRecipes)
+        } else { // Si l'input comprend moins de 3 caractères
+            recipesContainer.innerHTML = recipeHTMLString // Affichage de toutes les recettes
+            addIngredientsList(recipes)
+            addAppliancesList(recipes)
+            addUstensilslist(recipes)
+        }
+    }
     
     function closeFilter() {
         // Fermeture des div des items filtrés

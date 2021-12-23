@@ -16,7 +16,6 @@ const ustensilsUl = document.getElementById("ustensils-ul"); // Container des us
 const recipesContainer = document.getElementById("recipes-container"); // Container des recettes
 
 // Variables
-let recipes = []
 let recipeArray = [] // Tableau contenant toutes les recettes
 let recipeHTMLString = "" // Contenu de la liste des recettes
 let ingredientsHTMLString = "" // Contenu de la liste d'ingrédients
@@ -26,16 +25,19 @@ let selectedTags = [] // Tableau contenant tous les items cliqués
 let ingredientsTags = [] // Tableau contenant les ingrédients cliqués
 let appliancesTags = [] // Tableau contenant les appareils cliqués
 let ustensilsTags = [] // Tableau contenant les ustensiles cliqués
-let tagArray = [] // Crée un tableau pour la recherche par tags
-let tagRecipes = []// Crée un tableau pour la recherche par tags correspondant aux recettes sélectionnées
+let tagArray = [] // Tableau contenant la recherche par tags
+let tagRecipes = []// Tableau contenant la recherche par tags correspondant aux recettes sélectionnées
+let searchArray = [] // Tableau contenant les résultats de la recherche
+let searchRecipes = []
+
 
 
 // Récupération des recettes à partir du fichier JSON  
 const recipesFile = async function() {
     let response = await fetch ("javascript/recipes.js")
     if (response.ok) {
-        recipes = await response.json()
-        getRecipes(recipes)
+        let recipes = await response.json()
+        getRecipes(recipes) // Affichage des recettes sur la page
         addIngredientsList(recipes) // Affichage des ingrédients pour la search-card "Ingrédients"
         addAppliancesList(recipes) // Affichage des appareils dans la search-card "Appareils"
         addUstensilslist(recipes) // Affichage des ustensiles dans la search-card "Ustensiles"
@@ -46,23 +48,28 @@ const recipesFile = async function() {
 recipesFile()
 
 
-// *******************************************************************************
-// ********************************** FONCTIONS **********************************
-// *******************************************************************************
-//recipeConstructor(recipes)
+// *********************************************************************
+// ***************************** FONCTIONS *****************************
+// *********************************************************************
 
 searchbarInput.addEventListener("input", event => recipeFilter(event)) // Filtrage des recettes avec la search-bar
 
-ingredientsInput.addEventListener("input", ingredientsFilter) //Filtrage des ingredients
+ingredientsInput.addEventListener("input", ingredientsFilter) //Filtrage des ingredients au remplissage de la search-card
 addFilteredIngredient() // Affichage de l'ingrédient sélectionné
 
 addFilteredAppliance() // Affichage de l'appareil sélectionné
-appliancesInput.addEventListener("input", appliancesFilter) //Filtrage des appareils
+appliancesInput.addEventListener("input", appliancesFilter) //Filtrage des appareils au remplissage de la search-card
 
 addFilteredUstensil() // Affichage de l'ustensile sélectionné
-ustensilsInput.addEventListener("input", ustensilsFilter) //Filtrage des ustensiles
+ustensilsInput.addEventListener("input", ustensilsFilter) //Filtrage des ustensiles au remplissage de la search-card
 
-/* function recipeConstructor(param) {
+chevron[0].addEventListener("click", showIngredientsList) // Affichage des ingrédients au clic sur le bouton
+chevron[1].addEventListener("click", showAppliancesList) // Affichage des appareils au clic sur le bouton
+chevron[2].addEventListener("click", showUstensilsList) // Affichage des ustensiles au clic sur le bouton
+
+/*
+//recipeConstructor(recipes)
+function recipeConstructor(param) {
     let constructorArray = []
     param.forEach(element => {
         let unitArray = []
@@ -74,20 +81,15 @@ ustensilsInput.addEventListener("input", ustensilsFilter) //Filtrage des ustensi
         unitArray.push(this.id, this.name, this.ingredients, this.appliance, this.ustensils)
         constructorArray.push(unitArray)
     })
-    return constructorArray
+return constructorArray
 } */
 
-chevron[0].addEventListener("click", showIngredientsList) // Affichage des ingrédients au clic sur le bouton
-chevron[1].addEventListener("click", showAppliancesList) // Affichage des appareils au clic sur le bouton
-chevron[2].addEventListener("click", showUstensilsList) // Affichage des ustensiles au clic sur le bouton
+// **********************************************************************
+// ****************************** RECETTES ******************************
+// **********************************************************************
 
-
-// ****************************************************************************
-// ********************************* RECETTES *********************************
-// ****************************************************************************
-    
-function getRecipes(recipes) {
-    //Affichage des recettes sur la page
+//Affichage des recettes sur la page    
+function getRecipes(recipes) {    
     recipeArray = recipes.map( recipe => { 
         return { recipe: recipe, ingredients: recipe.ingredients.map(ingredientConstructor), appliance: recipe.appliance, ustensils: recipe.ustensils, html: `
         <div class="recipe-card" data-id="${recipe.id}">
@@ -120,15 +122,16 @@ function getIngredients(item) {
 }
 
 
-
-// ****************************************************************************
-// ****************************** INGRÉDIENTS *********************************
-// ****************************************************************************
+// **********************************************************************
+// *************************** INGRÉDIENTS ******************************
+// **********************************************************************
 
 // Affichage des ingrédients pour la search-card "Ingrédients"
-function addIngredientsList(recipes) {
+function addIngredientsList(array) {
     ingredientsUl.innerHTML = ""
-    const ingredientsArray = recipes.reduce((ingredientsArray, recipe)=>{
+    //console.log(array);
+    const ingredientsArray = array.reduce((ingredientsArray, recipe)=>{
+        //console.log(recipe);
         return [...ingredientsArray, ...recipe.ingredients.map(getIngredientsList)]
     }, [])
     ingredientsFilteredArray = ingredientsArray.filter((e,i)=>ingredientsArray.indexOf(e) == i)
@@ -136,6 +139,21 @@ function addIngredientsList(recipes) {
     ingredientsUl.innerHTML = ingredientsHTMLString || ""
     addFilteredIngredient() 
 }
+
+function newIngredientsList(array) {
+    ingredientsUl.innerHTML = ""
+    ingredientsArray = array.reduce((ingredientsArray, recipe)=>{
+        return [...ingredientsArray, ...recipe.ingredients]
+    }, [])
+    ingredientsFilteredArray = ingredientsArray.filter((e,i)=>ingredientsArray.indexOf(e) == i)
+
+    ingredientsHTMLString = ingredientsFilteredArray.map(item => {
+        return `<li class="ingredients-result">${item}</li>`
+    })
+    ingredientsUl.innerHTML = ingredientsHTMLString.join(" ") || ""
+    addFilteredIngredient()
+}
+
 function getIngredientsList(item) {
     return `<li class="ingredients-result">${item.ingredient}</li>`
 }
@@ -160,7 +178,6 @@ function ingredientsFilter() {
     addFilteredIngredient()
 }
 
-
 // Affichage de l'ingrédient sélectionné
 function addFilteredIngredient() {
     const ingredientsResult = document.querySelectorAll(".ingredients-result") // Ingrédients de la liste
@@ -174,31 +191,33 @@ function addFilteredIngredient() {
         }
     } */
     ingredientsResult.forEach(element => {
-        element.addEventListener("click", addItem)
-        function addItem(eventIngredient) {
-            let itemString = eventIngredient.target.innerText // Crée une variable contenant le texte de l'item cliqué
-            let ingredientsFilter = document.createElement("div") // Crée la div du filtre
-            ingredientsFilter.classList.add("item-filters") // Ajoute les classes
-            ingredientsFilter.classList.add("ingredients-filter")
-            ingredientsFilter.classList.add("active")
-            ingredientsFilter.innerHTML = `
-            <div class="filtered-item">${itemString}</div>
-            <i class="far fa-times-circle close-button"></i>
-            `
-            filters.appendChild(ingredientsFilter) // Insère le filtre dans sa div
-            selectedTags.push(itemString)
-            ingredientsTags.push(itemString)
-            recipeFilter(eventIngredient, "tag")
-            closeFilter()
-            closeCard(searchCard[0])
-            ingredientsInput.placeholder = `Ingrédients`
-        }
+        element.removeEventListener("click", addIngredient)
+        element.addEventListener("click", addIngredient)
     })
 }
 
-// *******************************************************************************
-// ********************************** APPAREILS **********************************
-// *******************************************************************************
+function addIngredient(eventIngredient) {
+    let itemString = eventIngredient.target.innerText // Crée une variable contenant le texte de l'item cliqué
+    let ingredientsFilter = document.createElement("div") // Crée la div du filtre
+    ingredientsFilter.classList.add("item-filters") // Ajoute les classes
+    ingredientsFilter.classList.add("ingredients-filter")
+    ingredientsFilter.classList.add("active")
+    ingredientsFilter.innerHTML = `
+    <div class="filtered-item">${itemString}</div>
+    <i class="far fa-times-circle close-button"></i>
+    `
+    filters.appendChild(ingredientsFilter) // Insère le filtre dans sa div
+    selectedTags.push(itemString)
+    ingredientsTags.push(itemString)
+    recipeFilter(eventIngredient, "tag")
+    closeFilter()
+    closeCard(searchCard[0])
+    ingredientsInput.placeholder = `Ingrédients`
+}
+
+// *********************************************************************
+// ***************************** APPAREILS *****************************
+// *********************************************************************
 
 // Affichage des appareils dans la search-card "Appareils"
 function addAppliancesList(recipes) {
@@ -240,7 +259,6 @@ function appliancesFilter() {
     addFilteredAppliance()
 }
 
-
 // Affichage de l'appareil sélectionné
 function addFilteredAppliance() {
     const appliancesResult = document.querySelectorAll(".appliances-result") // Appareils de la liste
@@ -254,35 +272,37 @@ function addFilteredAppliance() {
         }
     } */
     appliancesResult.forEach(element => {
-        element.addEventListener("click", addItem)
-        function addItem(eventAppliance) {
-            let itemString = eventAppliance.target.innerText // Crée une variable contenant le texte de l'item cliqué
-            let appliancesFilter = document.createElement("div") // Crée la div du filtre
-            appliancesFilter.classList.add("item-filters") // Ajoute les classes
-            appliancesFilter.classList.add("appliances-filter")
-            appliancesFilter.classList.add("active")
-            appliancesFilter.innerHTML = `
-            <div class="filtered-item">${itemString}</div>
-            <i class="far fa-times-circle close-button"></i>
-            `
-            filters.appendChild(appliancesFilter) // Insère le filtre dans sa div
-            selectedTags.push(itemString)
-            appliancesTags.push(itemString)
-            recipeFilter(eventAppliance, "tag")
-            closeFilter()
-            closeCard(searchCard[1])
-            appliancesInput.placeholder = `Appareils`
-        }
+        element.removeEventListener("click", addAppliance)
+        element.addEventListener("click", addAppliance)
     })
 }
 
-// ********************************************************************************
-// ********************************** USTENSILES **********************************
-// ********************************************************************************
+function addAppliance(eventAppliance) {
+    let itemString = eventAppliance.target.innerText // Crée une variable contenant le texte de l'item cliqué
+    let appliancesFilter = document.createElement("div") // Crée la div du filtre
+    appliancesFilter.classList.add("item-filters") // Ajoute les classes
+    appliancesFilter.classList.add("appliances-filter")
+    appliancesFilter.classList.add("active")
+    appliancesFilter.innerHTML = `
+    <div class="filtered-item">${itemString}</div>
+    <i class="far fa-times-circle close-button"></i>
+    `
+    filters.appendChild(appliancesFilter) // Insère le filtre dans sa div
+    selectedTags.push(itemString)
+    appliancesTags.push(itemString)
+    recipeFilter(eventAppliance, "tag")
+    closeFilter()
+    closeCard(searchCard[1])
+    appliancesInput.placeholder = `Appareils`
+}
+
+
+// **********************************************************************
+// ***************************** USTENSILES *****************************
+// **********************************************************************
 
 // Affichage des ustensiles dans la search-card "Ustensiles"
 function addUstensilslist(recipes) {
-    addFilteredUstensil()
     ustensilsUl.innerHTML = ""
     const ustensilsArray = recipes.reduce((ustensilsArray, recipe)=>{
         return [...ustensilsArray, ...recipe.ustensils]
@@ -338,43 +358,49 @@ function addFilteredUstensil() {
         }
     } */
     ustensilsResult.forEach(element => {
-        element.addEventListener("click", addItem)
-        function addItem(eventUstensil) {
-            let itemString = eventUstensil.target.innerText // Crée une variable contenant le texte de l'item cliqué
-            let ustensilsFilter = document.createElement("div") // Crée la div du filtre
-            ustensilsFilter.classList.add("item-filters") // Ajoute les classes
-            ustensilsFilter.classList.add("ustensils-filter")
-            ustensilsFilter.classList.add("active")
-            ustensilsFilter.innerHTML = `
-            <div class="filtered-item">${itemString}</div>
-            <i class="far fa-times-circle close-button"></i>
-            `
-            filters.appendChild(ustensilsFilter) // Insère le filtre dans sa div
-            selectedTags.push(itemString)
-            ustensilsTags.push(itemString)
-            recipeFilter(eventUstensil, "tag")
-            closeFilter()
-            closeCard(searchCard[2])
-            ustensilsInput.placeholder = `Ustensiles`
-        }
+        element.removeEventListener("click", addUstensil)
+        element.addEventListener("click", addUstensil)
     })
 }
 
-// *******************************************************************************
-// ********************************** SEARCHBAR **********************************
-// *******************************************************************************
+function addUstensil(eventUstensil) {
+    let itemString = eventUstensil.target.innerText // Crée une variable contenant le texte de l'item cliqué
+    let ustensilsFilter = document.createElement("div") // Crée la div du filtre
+    ustensilsFilter.classList.add("item-filters") // Ajoute les classes
+    ustensilsFilter.classList.add("ustensils-filter")
+    ustensilsFilter.classList.add("active")
+    ustensilsFilter.innerHTML = `
+    <div class="filtered-item">${itemString}</div>
+    <i class="far fa-times-circle close-button"></i>
+    `
+    filters.appendChild(ustensilsFilter) // Insère le filtre dans sa div
+    selectedTags.push(itemString)
+    ustensilsTags.push(itemString)
+    recipeFilter(eventUstensil, "tag")
+    closeFilter()
+    closeCard(searchCard[2])
+    ustensilsInput.placeholder = `Ustensiles`
+}
+
+// *********************************************************************
+// ***************************** SEARCHBAR *****************************
+// *********************************************************************
 
 // Filtrage des recettes avec la search-bar
 function recipeFilter(event, mode = "search") {
+    searchArray = []
     let inputResult = event.currentTarget
     if (mode == "search") {
         searchbarResearch(inputResult)
     } else if (mode == "tag") {
         if (selectedTags.length != 0) {
+            console.log(selectedTags);
+            console.log(tagArray)
             if (tagRecipes.length > 0) {
-                tagResearch(tagRecipes)
+                tagRecipes = tagResearch(tagRecipes)
+                //console.log(tagRecipes);
             } else {
-                tagResearch(recipeArray)
+                tagRecipes = tagResearch(recipeArray)
             }
             if (tagArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
                 recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`;
@@ -382,6 +408,7 @@ function recipeFilter(event, mode = "search") {
                 filteredTagArray = tagArray.filter((e,i)=>tagArray.indexOf(e) == i)
                 recipesContainer.innerHTML = filteredTagArray.join(" ")
             }
+            //console.log(tagRecipes);
             addIngredientsList(tagRecipes)
             addAppliancesList(tagRecipes)
             addUstensilslist(tagRecipes)
@@ -395,57 +422,84 @@ function recipeFilter(event, mode = "search") {
 }    
 
 function searchbarResearch(inputResult) {
-    console.log(inputResult.value);
+    //console.log(inputResult.value);
     let inputValue = inputResult.value
-    console.log(inputValue);
+    //console.log(inputValue);
     let inputArray = []
-    /* if (inputArray.length > 0) {
-        inputArray.pop()
-    } */
     inputArray.push(inputValue)
-    console.log(inputArray);
+    //console.log(inputArray);
+    //console.log(tagRecipes);
     if (inputValue.length >= 3) { // À partir de 3 caractères
-        let searchArray = [] // Crée un tableau
-        let searchRecipes = []
-        recipeArray.forEach(element => {
-            let research = inputValue.toLowerCase() // Récupère le résultat de la recherche
-            if (element.html.toLowerCase().includes(research)) {
-                searchArray.push(element.html) // Insère la recette dans le tableau créé
-                searchRecipes.push(element.recipe) // Insère la recette dans le tableau créé
-            }
-        })
+        if (tagRecipes.length > 0) { // Si une recherche par tag a été faite
+            newResearch(tagArray, inputValue)
+            console.log(`recherche à partir de tagArray :`, inputValue);
+        } else {
+            recipeResearch(recipeArray, inputValue)
+            console.log(`recherche à partir de recipeArray :`, inputValue);
+        }
         if (searchArray.length === 0) { // Si aucune recette n'a été mise dans le tableau
             recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`;
         } else { // Sinon (si au moins une recette correspond)
             recipesContainer.innerHTML = searchArray.join(" ")
         }
-        addIngredientsList(searchRecipes)
+        newIngredientsList(searchRecipes)
         addAppliancesList(searchRecipes)
         addUstensilslist(searchRecipes)
-    } else { // Si l'input comprend moins de 3 caractères
+    } else if (filteredTagArray = undefined){ // Si l'input comprend moins de 3 caractères
+        
+    } else {
         recipesContainer.innerHTML = recipeHTMLString // Affichage de toutes les recettes
-        addIngredientsList(recipes)
-        addAppliancesList(recipes)
-        addUstensilslist(recipes)
+        newIngredientsList(recipeArray)
+        addAppliancesList(recipeArray)
+        addUstensilslist(recipeArray)
     }
 }
 
-function tagResearch(array) {
+function recipeResearch(array, inputValue) {
     array.forEach(element => {
-        if (ingredientsTags.length > 0 && element.ingredients.join("").toLowerCase().includes(ingredientsTags.join("").toLowerCase())) {
+    let research = inputValue.toLowerCase()
+    if (element.html.toLowerCase().includes(research)) {
+        searchArray.push(element.html) // Insère la recette dans le tableau créé
+        searchRecipes.push(element.recipe) // Insère la recette dans le tableau créé
+    }
+    })
+}
+
+function newResearch(array, inputValue) {
+    array.forEach(element => {
+        let research = inputValue.toLowerCase()
+        if (element.toLowerCase().includes(research)) {
+            searchArray.push(element) // Insère la recette dans le tableau créé
+            searchRecipes.push(element) // Insère la recette dans le tableau créé
+        }
+        })
+}
+
+function tagResearch(array) {
+    tagArray = []
+    tagRecipes = []
+    array.forEach(element => {
+        if (element.recipe != undefined) {
+            console.log(ingredientsTags);
+            console.log(appliancesTags);
+            console.log(ustensilsTags);
+            if (ingredientsTags.length > 0 && element.ingredients.join("").toLowerCase().includes(ingredientsTags.join("").toLowerCase())) {
             tagArray.push(element.html) // Insère la recette dans le tableau créé
             tagRecipes.push(element.recipe) // Insère la recette dans le tableau créé
+            }
+            if (appliancesTags.length > 0 && element.appliance.toLowerCase().includes(appliancesTags.join("").toLowerCase())) {
+                tagArray.push(element.html)
+                tagRecipes.push(element.recipe)
+            }
+            if (ustensilsTags.length > 0 && element.ustensils.join("").toLowerCase().includes(ustensilsTags.join("").toLowerCase())) {
+                tagArray.push(element.html) 
+                tagRecipes.push(element.recipe) 
+            }
         }
-        if (appliancesTags.length > 0 && element.appliance.toLowerCase().includes(appliancesTags.join("").toLowerCase())) {
-            tagArray.push(element.html)
-            tagRecipes.push(element.recipe)
-        }
-        if (ustensilsTags.length > 0 && element.ustensils.join("").toLowerCase().includes(ustensilsTags.join("").toLowerCase())) {
-            tagArray.push(element.html) 
-            tagRecipes.push(element.recipe) 
-        }
+        //console.log(element.recipe);
+        //console.log(tagRecipes);
     })
-    return array
+    return tagRecipes
 }
 
 // **********************************************************************
@@ -458,13 +512,14 @@ function closeFilter() {
     closeButton.forEach(element => {
         element.addEventListener("click", removeActive)
     })
-    function removeActive(button) {
-        let icon = button.target
-        icon.parentElement.classList.remove("active") 
-        let item = icon.previousElementSibling.innerHTML
-        selectedTags = selectedTags.filter (element => element!== item)
-        recipeFilter(event, mode = "tag")
-    }
+}
+
+function removeActive(button) {
+    let icon = button.target
+    icon.parentElement.classList.remove("active") 
+    let item = icon.previousElementSibling.innerHTML
+    selectedTags = selectedTags.filter (element => element!== item)
+    recipeFilter(event, mode = "tag")
 }
 
 // Affichage des ingrédients au clic sur le bouton

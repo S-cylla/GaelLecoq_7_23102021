@@ -4,7 +4,7 @@ import {recipes} from "./recipes.js"
 const searchbarInput = document.getElementById("search"); // Input de la barre de recherche
 const chevron = document.querySelectorAll(".fa-chevron-down"); // Chevrons des boutons
 const searchCard = document.querySelectorAll(".search-card"); // Search-cards Ingrédients, Appareil, Ustensiles
-const filters = document.getElementById("filters"); // Résultat de la recherche d'ingrédient
+const filters = document.getElementById("filters"); // Div dans laquelle s'affichent les items filtrés
 const ingredientsInput = document.getElementById("ingredients"); // Input de la search-card "Ingredients"
 const appliancesInput = document.getElementById("appareil"); // Input de la search-card "Appareil"
 const ustensilsInput = document.getElementById("ustensiles"); // Input de la search-card "Ustensiles"
@@ -476,6 +476,8 @@ function searchbarResearch(searchbarInput) {
         if (selectedTags.length > 0) { // Si une recherche par tag a été faite
             recipeResearch(newRecipeArray, inputValue) // Recherche à partir des recettes filtrées par tag
         } else { // Si aucun filtrage
+            tagArray = getRecipes(recipes)
+            tagRecipes = getRecipes(recipes)    
             recipeResearch(recipeArray, inputValue) // Recherche à partir de toutes les recettes
         }
         if (tagArray.length === 0) { // Si aucune recette n'a été mise dans le tableau

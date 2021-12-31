@@ -29,6 +29,8 @@ let ustensilsTags = [] // Tableau contenant les ustensiles cliqués
 let tagArray = [] // Tableau contenant la recherche par tags
 let tagRecipes = [] // Tableau contenant la recherche par tags correspondant aux recettes sélectionnées
 let newRecipeArray = [] // Taleau remplaçant recipeArray après recherche par tags
+let recipeIngredients = "" // Liste des ingrédients de chaque recette
+let ingredientsStr = "" // Ingrédients et quantités affichés dans chaque recette
 
 
 // Récupération des recettes à partir du fichier JSON  
@@ -70,20 +72,20 @@ chevron[0].addEventListener("click", showIngredientsList) // Affichage des ingr�
 chevron[1].addEventListener("click", showAppliancesList) // Affichage des appareils au clic sur le bouton
 chevron[2].addEventListener("click", showUstensilsList) // Affichage des ustensiles au clic sur le bouton
 
-/*
-//recipeConstructor(recipes)
+/* //recipeConstructor(recipes)
 function recipeConstructor(param) {
     let constructorArray = []
-    param.forEach(element => {
+    for (let i = 0; i < param.length; i++) {
+        const element = param[i];
         let unitArray = []
         this.id = element.id
         this.name = element.name
-        this.ingredients = element.ingredients.map(ingredientConstructor)
+        this.ingredients = ingredientConstructor(element.ingredients)
         this.appliance = element.appliance
         this.ustensils = element.ustensils
         unitArray.push(this.id, this.name, this.ingredients, this.appliance, this.ustensils)
         constructorArray.push(unitArray)
-    })
+    }
 return constructorArray
 } */
 
@@ -98,10 +100,7 @@ function getRecipes(recipes) {
         const recipe = recipes[i];
         recipeArray.push({ 
             recipe: recipe, 
-            ingredients: ""/* for (let i = 0; i < recipe.ingredients.length; i++) {
-                const item = recipe.ingredients[i]
-                return `${item.ingredient}`
-            } */ , 
+            ingredients: ingredientConstructor(recipe.ingredients) , 
             appliance: recipe.appliance, 
             ustensils: recipe.ustensils, 
             html: `
@@ -113,7 +112,7 @@ function getRecipes(recipes) {
                             <span class="time"><i class="far fa-clock"></i> ${recipe.time} min</span>
                         </div>
                         <div class="recipe-instructions">
-                            <aside>${recipe.ingredients.map(getIngredients).join(" ")}</aside>
+                            <aside>${getIngredients(recipe.ingredients)}</aside>
                             <article class="description">${recipe.description.substring(0,181)}${recipe.description.length > 181 ? "...":""}</article> 
                         </div>
                     </div>
@@ -135,13 +134,25 @@ function getRecipes(recipes) {
 }
 
 // Affichage chaque ingrédient dans recipe.ingredient
-function ingredientConstructor(item) {
-    return `${item.ingredient}`
+function ingredientConstructor(array) {
+    let ingredientsConstructorArray = []
+    for (let j = 0; j < array.length; j++) {
+        const item = array[j];
+        recipeIngredients =  `${item.ingredient}`
+        ingredientsConstructorArray.push(recipeIngredients)
+    }
+    return ingredientsConstructorArray
 }
 
 // Affichage des ingrédients dans la card recette
-function getIngredients(item) {
-    return `<span class="ingredient">${item.ingredient}</span>: ${item.quantity || ""} ${item.unit || ""} <br>`;
+function getIngredients(array) {
+    let getIngredientsArray = []
+    for (let h = 0; h < array.length; h++) {
+        const item = array[h];
+        ingredientsStr = `<span class="ingredient">${item.ingredient}</span>: ${item.quantity || ""} ${item.unit || ""} <br>`;
+        getIngredientsArray.push(ingredientsStr)
+    }
+    return getIngredientsArray.join("")
 }
 
 
@@ -474,12 +485,14 @@ function searchbarResearch(searchbarInput) {
 }
 
 function recipeResearch(array, inputValue) {
+    tagArray = []
+    tagRecipes = []
     for (let i = 0; i < array.length; i++) {
         const element = array[i];
         let research = inputValue.toLowerCase()
-        if (!element.html.toLowerCase().includes(research)) {
-            tagArray = tagArray.filter(item => item != element.html)
-            tagRecipes = tagRecipes.filter(item => item != element.recipe)
+        if (element.html.toLowerCase().includes(research)) {
+            tagArray.push(element.html)
+            tagRecipes.push(element.recipe)
         }
     }
     return array

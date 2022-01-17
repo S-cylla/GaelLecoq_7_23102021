@@ -491,6 +491,7 @@ function searchbarResearch(searchbarInput) {
     if (selectedTags.length > 0) {
       // Si une recherche par tag a été faite
       recipeResearch(newRecipeArray, inputValue); // Recherche à partir des recettes filtrées par tag
+      console.log("newRecipeArray", newRecipeArray.length);
     } else {
       // Si aucun filtrage
       recipeResearch(recipeArray, inputValue); // Recherche à partir de toutes les recettes
@@ -500,12 +501,20 @@ function searchbarResearch(searchbarInput) {
       recipesContainer.innerHTML = `Aucune recette ne correspond à votre critère... Vous pouvez chercher  « tarte aux pommes », « poisson », etc.`;
     } else {
       // Sinon (si au moins une recette correspond)
-      recipesContainer.innerHTML = tagArray.join(" ");
+      let newTagArray = [];
+      for (let i = 0; i < tagArray.length; i++) {
+        const element = tagArray[i];
+        if (newTagArray.indexOf(element) === -1) {
+          newTagArray.push(element);
+        }
+      }
+      recipesContainer.innerHTML = newTagArray.join(" ");
     }
     addIngredientsList(tagRecipes);
     addAppliancesList(tagRecipes);
     addUstensilslist(tagRecipes);
-  } else if (inputValue.length > 0 && inputValue.length < 3) {
+    /*   } else if (inputValue.length > 0 && inputValue.length < 3) {
+     */
   } else {
     // Si l'input comprend moins de 3 caractères
     tagArray = getRecipes(recipes);
@@ -535,9 +544,10 @@ function searchbarResearch(searchbarInput) {
 function recipeResearch(array, inputValue) {
   tagArray = [];
   tagRecipes = [];
+  console.log(array);
+  let research = inputValue.toLowerCase();
   for (let i = 0; i < array.length; i++) {
     const element = array[i];
-    let research = inputValue.toLowerCase();
     if (element.html.toLowerCase().includes(research)) {
       tagArray.push(element.html);
       tagRecipes.push(element.recipe);
@@ -560,13 +570,13 @@ function tagResearch(array) {
           // Si tag introuvable
           tagArray = tagArray.filter((item) => item != element.html); // Supprime l'élément du tableau tagArray
           tagRecipes = tagRecipes.filter((item) => item != element.recipe); // Supprime l'élément du tableau tagRecipes
-          newRecipeArray = array.filter((item) => item != element);
         } else {
-          // Si on trouve l'élément, rien ne se passe
+          newRecipeArray.push(element);
         }
       }
     }
   }
+  array = array.filter((e, i) => array.indexOf(e) == i); // Supprime les doublons
   return array;
 }
 

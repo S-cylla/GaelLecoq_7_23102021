@@ -69,7 +69,6 @@ chevron[0].addEventListener("click", showIngredientsList); // Affichage des ingr
 chevron[1].addEventListener("click", showAppliancesList); // Affichage des appareils au clic sur le bouton
 chevron[2].addEventListener("click", showUstensilsList); // Affichage des ustensiles au clic sur le bouton
 
-
 // **********************************************************************
 // ****************************** RECETTES ******************************
 // **********************************************************************
@@ -445,8 +444,6 @@ function searchbarResearch(searchbarInput) {
       recipeResearch(newRecipeArray, inputValue); // Recherche à partir des recettes filtrées par tag
     } else {
       // Si aucun filtrage
-      tagArray = getRecipes(recipes);
-      tagRecipes = getRecipes(recipes);
       recipeResearch(recipeArray, inputValue); // Recherche à partir de toutes les recettes
     }
     if (tagArray.length === 0) {
@@ -459,11 +456,8 @@ function searchbarResearch(searchbarInput) {
     addIngredientsList(tagRecipes);
     addAppliancesList(tagRecipes);
     addUstensilslist(tagRecipes);
-  } else if (inputValue.length > 0 && inputValue.length < 3) {
   } else {
     // Si l'input comprend moins de 3 caractères
-    tagArray = getRecipes(recipes);
-    tagRecipes = getRecipes(recipes);
     if (selectedTags.length > 0) {
       tagResearch(recipeArray); // Recherche à partir de toutes les recettes
       if (tagArray.length === 0) {
